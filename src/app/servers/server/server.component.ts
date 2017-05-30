@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router, Data } from '@angular/router';
 
 import { ServersService } from '../servers.service';
 
@@ -9,17 +9,21 @@ import { ServersService } from '../servers.service';
   styleUrls: ['./server.component.css']
 })
 export class ServerComponent implements OnInit {
-  server: {id: number, name: string, status: string};
+  server: { id: number, name: string, status: string };
 
-  constructor(private serversService: ServersService, private activatedRoute:ActivatedRoute, private router:Router) { }
+  constructor(private serversService: ServersService, private activatedRoute: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
-    const id = +this.activatedRoute.snapshot.params['id'];
-    console.log("Current retrived id: " + id);
-    this.server = this.serversService.getServer(2);
-    this.activatedRoute.params.subscribe( (param: Params) => {
-      this.server = this.serversService.getServer(+param['id']);
-     });
+    this.activatedRoute.data
+      .subscribe((data: Data) => {
+        this.server = data['server'];
+      });
+    // const id = +this.activatedRoute.snapshot.params['id'];
+    // console.log("Current retrived id: " + id);
+    // this.server = this.serversService.getServer(2);
+    // this.activatedRoute.params.subscribe( (param: Params) => {
+    //   this.server = this.serversService.getServer(+param['id']);
+    //  });
   }
 
   onEdit() {
